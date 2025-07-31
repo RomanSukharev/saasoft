@@ -1,7 +1,10 @@
 <script setup lang="ts">
 defineEmits<{
   enter: [];
+  focus: FocusEvent;
+  blur: FocusEvent;
 }>();
+
 
 withDefaults(
   defineProps<{
@@ -42,7 +45,10 @@ const value = defineModel<string | null>();
         :maxlength="maxLength"
         class="flex-1 text-[#121619] outline-none bg-transparent"
         @keyup.enter="$emit('enter')"
+        @focus="$emit('focus')"
+        @blur="$emit('blur')"
       />
+
     </div>
 
   </div>

@@ -1,4 +1,4 @@
-import { ref, watch, computed } from 'vue'
+import {  computed } from 'vue'
 import type { IAccountProps } from '@/types'
 import { useAccountsStore } from '@/stores/useAccountsStore'
 
@@ -8,33 +8,46 @@ export function useAccountItem(props: {
 }) {
   const accountsStore = useAccountsStore()
 
-  const localLabel = ref(
-    Array.isArray(props.account.label)
-      ? props.account.label.map((item) => item.text).join(';')
-      : ''
-  )
+  const localLabel = computed({
+    get: () => {
+      return Array.isArray(props.account.label)
+        ? props.account.label.map((item) => item.text).join(';')
+        : ''
+    },
+    set: (value: string) => {
+      const parsedLabel = value
+        .split(';')
+        .map((text) => text.trim())
+        .filter((text) => text.length > 0)
+        .map((text) => ({ text }))
 
-  const localType = ref(props.account.type)
-  const localLogin = ref(props.account.login)
-  const localPassword = ref(props.account.password)
-
-  watch(localType, (newType) => {
-    if (newType === 'ldap') {
-      localPassword.value = null
+      accountsStore.updateAccount(props.account.id, 'label', parsedLabel)
     }
   })
 
-  watch([localLabel, localType, localLogin, localPassword], () => {
-    const parsedLabel = localLabel.value
-      .split(';')
-      .map((text) => text.trim())
-      .filter((text) => text.length > 0)
-      .map((text) => ({ text }))
+  const localType = computed({
+    get: () => props.account.type,
+    set: (value: string) => {
+      // Если тип изменился на ldap, очищаем пароль
+      if (value === 'ldap') {
+        accountsStore.updateAccount(props.account.id, 'password', null)
+      }
+      accountsStore.updateAccount(props.account.id, 'type', value)
+    }
+  })
 
-    accountsStore.updateAccount(props.account.id, 'label', parsedLabel)
-    accountsStore.updateAccount(props.account.id, 'type', localType.value)
-    accountsStore.updateAccount(props.account.id, 'login', localLogin.value)
-    accountsStore.updateAccount(props.account.id, 'password', localPassword.value)
+  const localLogin = computed({
+    get: () => props.account.login,
+    set: (value: string) => {
+      accountsStore.updateAccount(props.account.id, 'login', value)
+    }
+  })
+
+  const localPassword = computed({
+    get: () => props.account.password,
+    set: (value: string | null) => {
+      accountsStore.updateAccount(props.account.id, 'password', value)
+    }
   })
 
   const removeAccount = () => {
@@ -46,7 +59,7 @@ export function useAccountItem(props: {
     type: !localType.value,
     login: localLogin.value.trim() === '',
     password: localType.value !== 'ldap' && (!localPassword.value || localPassword.value.trim() === ''),
-  }));
+  }))
 
   return {
     localLabel,

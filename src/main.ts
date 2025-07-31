@@ -8,7 +8,6 @@ import PrimeVue from 'primevue/config'
 import Toast from 'primevue/toast';
 import ToastService from 'primevue/toastservice'
 import App from './App.vue'
-import router from './router'
 import Password from 'primevue/password'
 import Select from 'primevue/select'
 import Button from 'primevue/button'
@@ -29,7 +28,6 @@ app.component('PrimeSelect', Select)
 app.component('PrimeButton', Button)
 app.component('PrimeToast', Toast);
 
-app.use(router)
 app.use(pinia)
 
 app.mount('#app')

@@ -1,10 +1,11 @@
+<!-- AccountsList.vue -->
 <script setup lang="ts">
 import { ref } from 'vue';
-import AccountAdd from './internal/AccountAdd.vue';
-import AccountItem from './internal/AccountItem.vue';
+import AccountAdd from './AccountAdd.vue';
+import AccountItem from './AccountItem.vue';
 import { accountTableHeaders } from '@/constants';
 import { useAccountsStore } from '@/stores/useAccountsStore';
-import type { TAny } from '@/types';
+import type { IAccountProps } from '@/types';
 import { storeToRefs } from 'pinia';
 import { useToast } from 'primevue'
 
@@ -14,7 +15,7 @@ const toast = useToast()
 
 const isTriedToAdd = ref(false);
 
-const isAccountValid = (account: TAny) => {
+const isAccountValid = (account: IAccountProps) => {
   return (
     typeof account.type === 'string' && account.type.trim() !== '' &&
     typeof account.login === 'string' && account.login.trim() !== '' &&
@@ -47,22 +48,28 @@ function onAddAccount() {
     <AccountAdd @add="onAddAccount" />
 
     <template v-if="accounts.length > 0">
-      <div class="flex flex-row gap-2 w-full text-sm font-medium text-gray-500">
-        <div
-          v-for="header in accountTableHeaders"
-          :key="header.id"
-          :class="header.class"
-        >
-          {{ header.title }}
+      <div class="accounts-grid">
+        <!-- Заголовки -->
+        <div class="accounts-headers">
+          <div
+            v-for="header in accountTableHeaders"
+            :key="header.id"
+            class="accounts-header-item"
+          >
+            {{ header.title }}
+          </div>
+        </div>
+
+        <!-- Элементы аккаунтов -->
+        <div class="accounts-items">
+          <AccountItem
+            v-for="(account, index) in accounts"
+            :key="account.id"
+            :account="account"
+            :show-errors="isTriedToAdd && index === accounts.length - 1"
+          />
         </div>
       </div>
-
-      <AccountItem
-        v-for="(account, index) in accounts"
-        :key="account.id"
-        :account="account"
-        :show-errors="isTriedToAdd && index === accounts.length - 1"
-      />
     </template>
 
     <div v-else class="py-4 text-center text-gray-500 border border-solid border-[#DDE1E6] rounded-md">
@@ -70,3 +77,30 @@ function onAddAccount() {
     </div>
   </div>
 </template>
+
+<style scoped>
+.accounts-grid {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  gap: 8px;
+}
+
+.accounts-headers {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 50px;
+  gap: 8px;
+  align-items: center;
+}
+
+.accounts-header-item {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #6b7280;
+}
+
+.accounts-items {
+  display: grid;
+  grid-template-rows: repeat(auto-fill, minmax(auto, 1fr));
+  gap: 8px;
+}
+</style>

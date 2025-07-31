@@ -1,21 +1,9 @@
 <script setup lang="ts">
-import AccountsView from './views/AccountsView.vue';
+import AccountsList from './components/AccountsList.vue';
 
 const toastStyle = {
-  root: {
-    class: "w-[400px] max-mobile:w-[90vw] fixed top-4 right-4",
-  },
-  container: {
-    class: "mb-4 rounded-lg shadow-lg overflow-hidden",
-  },
-  message: {
-    class: "p-0",
-  },
   messageIcon: {
     class: "mt-1 mr-1",
-  },
-  content: {
-    class: "p-4 flex items-start",
   },
   text: {
     class: "ml-3",
@@ -33,17 +21,13 @@ const toastStyle = {
     class:
       "w-4 h-4 ml-auto mt-1 opacity-60 hover:opacity-100 transition-opacity",
   },
-  closeIcon: {
-    class: "w-4 h-4",
-  },
 };
 
 </script>
 
 <template>
   <div class="p-2.5 flex flex-col gap-3">
-    <AccountsView />
-
+    <AccountsList />
 
     <PrimeToast :pt="toastStyle"/>
   </div>
@@ -137,13 +121,5 @@ const toastStyle = {
   background: rgba(0, 0, 0, 0.05);
 }
 
-.p-toast .p-toast-icon-close:focus {
-  outline: none;
-  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5);
-}
-
-.p-dialog-mask {
-  background: #00000050;
-}
 </style>
 

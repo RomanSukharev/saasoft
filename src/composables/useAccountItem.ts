@@ -28,7 +28,6 @@ export function useAccountItem(props: {
   const localType = computed({
     get: () => props.account.type,
     set: (value: string) => {
-      // Если тип изменился на ldap, очищаем пароль
       if (value === 'ldap') {
         accountsStore.updateAccount(props.account.id, 'password', null)
       }

@@ -1,58 +1,37 @@
-<!-- AccountsList.vue -->
 <script setup lang="ts">
 import { ref } from 'vue';
 import AccountAdd from './AccountAdd.vue';
 import AccountItem from './AccountItem.vue';
-import { accountTableHeaders } from '@/constants';
+import { headers } from '@/constants';
 import { useAccountsStore } from '@/stores/useAccountsStore';
-import type { IAccountProps } from '@/types';
 import { storeToRefs } from 'pinia';
-import { useToast } from 'primevue'
-
-const store = useAccountsStore();
-const { accounts } = storeToRefs(store);
-const toast = useToast()
 
 const isTriedToAdd = ref(false);
-
-const isAccountValid = (account: IAccountProps) => {
-  return (
-    typeof account.type === 'string' && account.type.trim() !== '' &&
-    typeof account.login === 'string' && account.login.trim() !== '' &&
-    (account.type === 'ldap' || (typeof account.password === 'string' && account.password.trim() !== ''))
-  );
-};
+const store = useAccountsStore();
+const { accounts } = storeToRefs(store);
 
 function onAddAccount() {
   isTriedToAdd.value = true;
 
-  const lastAccount = accounts.value[accounts.value.length - 1];
+  const wasAdded = store.tryAddAccount();
 
-  if (lastAccount && !isAccountValid(lastAccount)) {
-    toast.add({
-      severity: "warn",
-      summary: "Предупреждение",
-      detail: "Обязательные поля должны быть заполнены",
-      life: 5000,
-    });
-    return;
+  if (wasAdded) {
+    isTriedToAdd.value = false;
   }
-
-  isTriedToAdd.value = false;
-  store.addAccount();
 }
 </script>
 
 <template>
   <div class="flex flex-col gap-3">
-    <AccountAdd @add="onAddAccount" />
+    <AccountAdd
+      @add="onAddAccount"
+    />
 
     <template v-if="accounts.length > 0">
       <div class="accounts-grid">
-        <!-- Заголовки -->
         <div class="accounts-headers">
           <div
-            v-for="header in accountTableHeaders"
+            v-for="header in headers"
             :key="header.id"
             class="accounts-header-item"
           >
@@ -60,7 +39,6 @@ function onAddAccount() {
           </div>
         </div>
 
-        <!-- Элементы аккаунтов -->
         <div class="accounts-items">
           <AccountItem
             v-for="(account, index) in accounts"
@@ -78,7 +56,7 @@ function onAddAccount() {
   </div>
 </template>
 
-<style scoped>
+<style lang="scss">
 .accounts-grid {
   display: grid;
   grid-template-rows: auto 1fr;

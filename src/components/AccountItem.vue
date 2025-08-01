@@ -1,6 +1,5 @@
-<!-- AccountItem.vue -->
 <script setup lang="ts">
-import { ref, watch } from 'vue'
+import { ref } from 'vue'
 import FormInput from '@/ui-kit/input/FormInput.vue'
 import FormSelect from '@/ui-kit/select/FormSelect.vue'
 import FormInputPassword from '@/ui-kit/input/FormInputPassword.vue'
@@ -14,6 +13,8 @@ const props = defineProps<{
   showErrors?: boolean
 }>()
 
+const showHint = ref(false)
+
 const {
   localLabel,
   localType,
@@ -22,14 +23,6 @@ const {
   removeAccount,
   errors
 } = useAccountItem(props)
-
-const showHint = ref(false)
-
-watch(localLabel, (newVal) => {
-  if (newVal.length > 0) {
-    showHint.value = false
-  }
-})
 </script>
 
 <template>
@@ -86,7 +79,7 @@ watch(localLabel, (newVal) => {
   </div>
 </template>
 
-<style scoped>
+<style lang="scss">
 .account-item-grid {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr auto;

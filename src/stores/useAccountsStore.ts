@@ -51,11 +51,38 @@ export const useAccountsStore = defineStore('accounts', () => {
     }
   }
 
+  const isAccountValid = (account: IAccountProps): boolean => {
+    return (
+      typeof account.type === 'string' && account.type.trim() !== '' &&
+      typeof account.login === 'string' && account.login.trim() !== '' &&
+      (account.type === 'ldap' || (typeof account.password === 'string' && account.password.trim() !== ''))
+    )
+  }
+
+  const tryAddAccount = (): boolean => {
+    const lastAccount = accounts.value[accounts.value.length - 1]
+
+    if (lastAccount && !isAccountValid(lastAccount)) {
+      toast.add({
+        severity: "warn",
+        summary: "Предупреждение",
+        detail: "Обязательные поля должны быть заполнены",
+        life: 5000,
+      })
+      return false
+    }
+
+    addAccount()
+    return true
+  }
+
   return {
     accounts,
     addAccount,
     removeAccount,
-    updateAccount
+    updateAccount,
+    isAccountValid,
+    tryAddAccount
   }
 }, {
   persist: true

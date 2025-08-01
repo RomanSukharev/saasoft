@@ -9,7 +9,7 @@ export const typeAccount = [
   },
 ];
 
-export const accountTableHeaders = [
+export const headers = [
   {
     id: 1,
     title: "Метки",

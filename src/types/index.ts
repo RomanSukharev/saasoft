@@ -11,7 +11,7 @@ export type TAnyFunction = (...args: TAny[]) => TAny;
 export interface IAccountProps {
   id: number
   label?: { text: string }[];
-  type: string | null
+  type: string
   login: string
   password: string | null
 }

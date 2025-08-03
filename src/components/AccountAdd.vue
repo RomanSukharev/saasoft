@@ -12,7 +12,7 @@ function onCreateAccount(): void {
 
 <template>
   <div class="flex items-center gap-3">
-    <span class="text-base font-semibold">Учетные записи</span>
+    <span class="text-base select-none font-semibold">Учетные записи</span>
 
     <FormButton
       outline

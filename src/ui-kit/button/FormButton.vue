@@ -5,28 +5,26 @@ defineEmits<{
 
 withDefaults(
   defineProps<{
-    type?: 'button' | 'submit' | 'reset';
+    type?: string;
     outline?: boolean;
-    required?: boolean;
     icon?: string;
-    hoverRed?: boolean;
+    hover?: boolean;
   }>(),
   {
     type: "button",
     outline: false,
-    required: false,
     icon: 'pi pi-plus',
-    hoverRed: false,
+    hover: false,
   },
 );
 </script>
 
 <template>
   <div
-    class="py-3 px-4 rounded-md"
+    class="py-3 px-4 cursor-pointer rounded-md"
     :class="{
       'border border-solid border-[#DDE1E6]': outline,
-      'hover:text-red-500 transition-all': hoverRed
+      'hover:text-red-500 transition-all': hover
     }"
   >
   <PrimeButton

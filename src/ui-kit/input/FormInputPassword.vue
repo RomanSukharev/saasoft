@@ -8,15 +8,13 @@ defineEmits<{
 const props = withDefaults(
   defineProps<{
     placeholder?: string;
-    error?: string;
-    required?: boolean;
+    error?: boolean;
     isEdit?: boolean;
     maxLength?: number;
   }>(),
   {
     placeholder: undefined,
     error: undefined,
-    required: false,
     isEdit: true,
     maxLength: 100,
   },

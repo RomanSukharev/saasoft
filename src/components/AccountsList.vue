@@ -29,7 +29,7 @@ function onAddAccount() {
 
     <template v-if="accounts.length > 0">
       <div class="accounts-grid">
-        <div class="accounts-headers">
+        <div class="accounts-headers select-none">
           <div
             v-for="header in headers"
             :key="header.id"
@@ -41,16 +41,16 @@ function onAddAccount() {
 
         <div class="accounts-items">
           <AccountItem
-            v-for="(account, index) in accounts"
+            v-for="account in accounts"
             :key="account.id"
             :account="account"
-            :show-errors="isTriedToAdd && index === accounts.length - 1"
+            :show-errors="isTriedToAdd"
           />
         </div>
       </div>
     </template>
 
-    <div v-else class="py-4 text-center text-gray-500 border border-solid border-[#DDE1E6] rounded-md">
+    <div v-else class="py-20 text-center select-none text-gray-400 border border-solid border-[#DDE1E6] rounded-md">
       Учетных записей пока нет
     </div>
   </div>

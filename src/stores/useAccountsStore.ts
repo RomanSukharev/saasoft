@@ -2,6 +2,7 @@ import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
 import type { IAccountProps } from '@/types'
 import { useToast } from 'primevue'
+import { isAccountValid } from '@/helpers/accountValidity'
 
 export const useAccountsStore = defineStore('accounts', () => {
   const toast = useToast()
@@ -16,7 +17,7 @@ export const useAccountsStore = defineStore('accounts', () => {
   const createEmptyAccount = (): IAccountProps => ({
     id: nextId.value,
     label: [],
-    type: null,
+    type: '',
     login: '',
     password: ''
   })
@@ -51,18 +52,10 @@ export const useAccountsStore = defineStore('accounts', () => {
     }
   }
 
-  const isAccountValid = (account: IAccountProps): boolean => {
-    return (
-      typeof account.type === 'string' && account.type.trim() !== '' &&
-      typeof account.login === 'string' && account.login.trim() !== '' &&
-      (account.type === 'ldap' || (typeof account.password === 'string' && account.password.trim() !== ''))
-    )
-  }
-
   const tryAddAccount = (): boolean => {
-    const lastAccount = accounts.value[accounts.value.length - 1]
+    const hasInvalid = accounts.value.some(acc => !isAccountValid(acc))
 
-    if (lastAccount && !isAccountValid(lastAccount)) {
+    if (hasInvalid) {
       toast.add({
         severity: "warn",
         summary: "Предупреждение",
@@ -76,12 +69,12 @@ export const useAccountsStore = defineStore('accounts', () => {
     return true
   }
 
+
   return {
     accounts,
     addAccount,
     removeAccount,
     updateAccount,
-    isAccountValid,
     tryAddAccount
   }
 }, {

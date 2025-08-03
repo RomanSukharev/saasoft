@@ -47,7 +47,7 @@ const {
         v-model="localType"
         :items="typeAccount"
         placeholder="Тип метки"
-        :error="showErrors && errors.type ? 'Поле обязательно' : ''"
+        :error="showErrors && errors.type"
         new-select
       />
     </div>
@@ -57,7 +57,7 @@ const {
         v-model="localLogin"
         :max-length="100"
         placeholder="Введите логин"
-        :error="showErrors && errors.login ? 'Поле обязательно' : ''"
+        :error="showErrors && errors.login"
       />
     </div>
 
@@ -65,14 +65,14 @@ const {
       <FormInputPassword
         v-model="localPassword"
         placeholder="Введите пароль"
-        :error="showErrors && errors.password ? 'Поле обязательно' : ''"
+        :error="showErrors && errors.password"
       />
     </div>
 
     <div class="account-item-button">
       <FormButton
         icon="pi pi-trash"
-        hover-red
+        hover
         @click="removeAccount"
       />
     </div>

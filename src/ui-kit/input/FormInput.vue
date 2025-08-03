@@ -10,8 +10,7 @@ withDefaults(
   defineProps<{
     type?: string;
     placeholder?: string;
-    error?: string;
-    required?: boolean;
+    error?: boolean;
     isEdit?: boolean;
     maxLength?: number;
   }>(),
@@ -19,7 +18,6 @@ withDefaults(
     type: "text",
     placeholder: undefined,
     error: undefined,
-    required: false,
     isEdit: true,
     maxLength: 50,
   },
@@ -41,16 +39,13 @@ const value = defineModel<string | null>();
         v-model="value"
         :type="type"
         :placeholder="placeholder"
-        :required="required"
         :maxlength="maxLength"
         class="flex-1 text-[#121619] outline-none bg-transparent"
         @keyup.enter="$emit('enter')"
         @focus="$emit('focus')"
         @blur="$emit('blur')"
       />
-
     </div>
-
   </div>
 </template>
 

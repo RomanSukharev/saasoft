@@ -5,13 +5,11 @@ import { ref } from 'vue';
 withDefaults(
   defineProps<{
     placeholder?: string;
-    error?: string;
-    required?: boolean;
+    error?: boolean;
     items?: TAny[];
     keyProperty?: string;
     displayProperty?: string;
     newSelect?: boolean;
-    disabled?: boolean;
     isEdit?: boolean;
   }>(),
   {
@@ -21,7 +19,6 @@ withDefaults(
     keyProperty: "id",
     displayProperty: "title",
     newSelect: false,
-    disabled: false,
     isEdit: true,
   },
 );
@@ -32,7 +29,6 @@ const isOpen = ref(false);
 
 <template>
   <div class="flex self-stretch justify-center items-center flex-col w-full">
-
     <div
      class="flex self-stretch justify-start items-center flex-row py-3 px-4 bg-[#FFFFFF] rounded-md border"
       :class="{
@@ -44,7 +40,6 @@ const isOpen = ref(false);
         v-if="newSelect"
         v-model="value"
         class="w-full"
-        :required="required"
         :pt="{
           label: '',
           overlay: '!bg-[#FFFFFF] !shadow !rounded-md',
@@ -55,12 +50,10 @@ const isOpen = ref(false);
         :option-label="displayProperty"
         :option-value="keyProperty"
         :placeholder="placeholder"
-        :disabled="disabled"
         @show="isOpen = true"
         @hide="isOpen = false"
       />
     </div>
-
   </div>
 </template>
 
